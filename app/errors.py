@@ -1,3 +1,5 @@
+from typing import List
+
 from app.types import StrDict
 
 
@@ -7,7 +9,7 @@ class BaseError(Exception):
 
     def __init__(
         self,
-        message: str | None = None,
+        message: List[StrDict] | List[str] | str | None = None,
         status_code: int | None = None,
         extra: StrDict | None = None,
     ) -> None:

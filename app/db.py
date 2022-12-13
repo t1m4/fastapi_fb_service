@@ -70,6 +70,6 @@ def select_scalar(query: Any) -> Any:
     return result.scalar_one()
 
 
-def execute(query: Any) -> None:
+def execute(query: Any, *args) -> None:
     connection = get_connection()
-    connection.execute(query)
+    connection.execute(query, *args)
