@@ -1,6 +1,6 @@
 from typing import List
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class BaseCampaign(BaseModel):
@@ -13,7 +13,7 @@ class CampaignCreate(BaseCampaign):
 
 
 class CampaignUpdate(BaseModel):
-    campaign_id: int = Field(..., alias="id")
+    id: int
     name: str
 
 

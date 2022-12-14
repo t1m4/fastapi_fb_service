@@ -1,8 +1,8 @@
 """Add init tables
 
-Revision ID: efdce2ddd12c
+Revision ID: 943f51d2375c
 Revises: 
-Create Date: 2022-12-08 11:13:56.023347
+Create Date: 2022-12-14 14:20:05.086621
 
 """
 import sqlalchemy as sa
@@ -10,7 +10,7 @@ from alembic import op
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = "efdce2ddd12c"
+revision = "943f51d2375c"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -38,17 +38,17 @@ def upgrade() -> None:
     op.create_table(
         "adset",
         sa.Column("id", sa.BigInteger(), sa.Identity(always=False), nullable=False),
-        sa.Column("campaign", sa.BigInteger(), nullable=False),
+        sa.Column("campaign_id", sa.BigInteger(), nullable=False),
         sa.Column("name", sa.String(), nullable=False),
-        sa.ForeignKeyConstraint(["campaign"], ["campaign.id"], ondelete="CASCADE"),
+        sa.ForeignKeyConstraint(["campaign_id"], ["campaign.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_table(
         "ad",
         sa.Column("id", sa.BigInteger(), sa.Identity(always=False), nullable=False),
-        sa.Column("ad_set", sa.BigInteger(), nullable=False),
+        sa.Column("ad_set_id", sa.BigInteger(), nullable=False),
         sa.Column("name", sa.String(), nullable=False),
-        sa.ForeignKeyConstraint(["ad_set"], ["adset.id"], ondelete="CASCADE"),
+        sa.ForeignKeyConstraint(["ad_set_id"], ["adset.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )
     # ### end Alembic commands ###

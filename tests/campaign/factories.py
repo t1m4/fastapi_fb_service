@@ -1,4 +1,3 @@
-import sqlalchemy as sa
 from pydantic_factories import ModelFactory
 
 from app import db
@@ -15,13 +14,14 @@ class CampaignFactory(ModelFactory[models.Campaign]):
 
     @staticmethod
     def save(instance: models.Campaign) -> models.Campaign:
-        with db.begin():
-            query = sa.insert(tables.Campaign).values(instance.dict()).returning(tables.Campaign)
-            row = db.select_one(query)
-            return models.Campaign.from_orm(row)
+        with db.create_session() as session:
+            campaign = tables.Campaign(**instance.dict())
+            session.add(campaign)
+            session.commit()
+            return models.Campaign.from_orm(campaign)
 
     @classmethod
     def get(cls, campaign_id: int) -> models.Campaign | None:
-        with db.connect():
-            row = db.select_one(sa.select(tables.Campaign).where(tables.Campaign.id == campaign_id))
+        with db.create_session():
+            row = db.session_get(tables.Campaign, campaign_id)
         return models.Campaign.from_orm(row) if row else None

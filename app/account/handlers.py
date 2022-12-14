@@ -1,4 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Path
+
+from app import db
+from app.account import models, services
 
 router = APIRouter()
 
@@ -14,9 +17,10 @@ def get_accounts():
     ...
 
 
-@router.get("/account/{id}")
-def get_account():
-    ...
+@router.get("/account/{id}", response_model=models.Account)
+def get_account(id_: int = Path(..., alias="id")):
+    with db.create_session():
+        return services.get_account(id_)
 
 
 @router.put("/account/{id}")

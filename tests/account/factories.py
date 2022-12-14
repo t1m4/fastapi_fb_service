@@ -1,4 +1,3 @@
-import sqlalchemy as sa
 from pydantic_factories import ModelFactory
 
 from app import db
@@ -15,13 +14,14 @@ class AccountFactory(ModelFactory[models.Account]):
 
     @staticmethod
     def save(instance: models.Account) -> models.Account:
-        with db.begin():
-            query = sa.insert(tables.Account).values(instance.dict()).returning(tables.Account)
-            row = db.select_one(query)
-            return models.Account.from_orm(row)
+        with db.create_session() as session:
+            account = tables.Account(**instance.dict())
+            session.add(account)
+            session.commit()
+            return models.Account.from_orm(account)
 
     @classmethod
     def get(cls, id_: int) -> models.Account | None:
-        with db.connect():
-            row = db.select_one(sa.select(tables.Account).where(tables.Account.id == id_))
+        with db.create_session():
+            row = db.session_get(tables.Account, id_)
         return models.Account.from_orm(row) if row else None

@@ -75,8 +75,8 @@ class CampaignsUpdateValidation:
         """
         errors = []
         for index, campaign in enumerate(self.campaigns):
-            if campaign.campaign_id not in self.db_campaigns:
-                errors.append({index: "Campaign with id {} doesn't exists".format(campaign.campaign_id)})
+            if campaign.id not in self.db_campaigns:
+                errors.append({index: "Campaign with id {} doesn't exists".format(campaign.id)})
         if any(errors):
             raise BaseError(errors)
 
@@ -90,7 +90,7 @@ class CampaignsUpdateValidation:
         for index, campaign in enumerate(self.campaigns):
             validation_service = CampaignValidation()
             try:
-                validation_service.validate(campaign, self.db_campaigns[campaign.campaign_id])
+                validation_service.validate(campaign, self.db_campaigns[campaign.id])
             except BaseError as exception:
                 errors.append({index: exception.message})
         if any(errors):
